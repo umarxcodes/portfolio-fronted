@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-primary: #0a0f1c;
+  --bg-card: #1a2235;
+  --text-primary: #f0f4ff;
+  --text-secondary: #8b9dc3;
+  --accent: #00d4c8;
+  --border: #2a3548;
+  --danger: #ff4d6d;
+  --success: #06d6a0;
+  --warning: #ffb830;
+}
+
+@layer base {
+  body {
+    @apply bg-[var(--bg-primary)] text-[var(--text-primary)];
+    font-family:
+      "Inter",
+      system-ui,
+      -apple-system,
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none;
+  }
+  .btn-primary {
+    @apply bg-[var(--accent)] text-[var(--bg-primary)] hover:bg-[var(--accent)]/90 focus:ring-[var(--accent)];
+  }
+  .btn-secondary {
+    @apply bg-[var(--bg-card)] text-[var(--text-primary)] border border-[var(--border)] hover:bg-[var(--border)]/50 focus:ring-[var(--border)];
+  }
+  .input {
+    @apply block w-full rounded-lg border border-[var(--border)] bg-[var(--bg-card)] px-3 py-2 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-secondary)] focus:border-[var(--accent)] focus:outline-none focus:ring-1 focus:ring-[var(--accent)];
+  }
+}
