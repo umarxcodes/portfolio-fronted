@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Muhammad Umar monogram">
+  <defs>
+    <linearGradient id="mu-gradient" x1="10" y1="8" x2="54" y2="58" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#4f46e5" />
+      <stop offset="1" stop-color="#14b8a6" />
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="16" fill="url(#mu-gradient)" />
+  <path d="M15 45V19l10 13 10-13v26" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M40 19v15c0 7 3.7 11 9 11s9-4 9-11V19" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
