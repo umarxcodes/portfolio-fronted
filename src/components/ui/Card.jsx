@@ -1,6 +1,7 @@
+import { memo } from "react";
 import { cn } from "@/lib/cn";
 
-export function Card({ className, children, hover, ...props }) {
+export const Card = memo(function Card({ className, children, hover, ...props }) {
   return (
     <div
       className={cn(
@@ -13,9 +14,9 @@ export function Card({ className, children, hover, ...props }) {
       {children}
     </div>
   );
-}
+});
 
-export function CardHeader({ className, children, ...props }) {
+export const CardHeader = memo(function CardHeader({ className, children, ...props }) {
   return (
     <div
       className={cn(
@@ -27,30 +28,30 @@ export function CardHeader({ className, children, ...props }) {
       {children}
     </div>
   );
-}
+});
 
-export function CardTitle({ className, children, ...props }) {
+export const CardTitle = memo(function CardTitle({ className, children, ...props }) {
   return (
     <h3 className={cn("text-base font-semibold text-content-primary", className)} {...props}>
       {children}
     </h3>
   );
-}
+});
 
-export function CardBody({ className, children, ...props }) {
+export const CardBody = memo(function CardBody({ className, children, ...props }) {
   return (
     <div className={cn("p-5", className)} {...props}>
       {children}
     </div>
   );
-}
+});
 
-export function CardFooter({ className, children, ...props }) {
+export const CardFooter = memo(function CardFooter({ className, children, ...props }) {
   return (
     <div className={cn("border-t border-border px-5 py-4", className)} {...props}>
       {children}
     </div>
   );
-}
+});
 
 export default Card;

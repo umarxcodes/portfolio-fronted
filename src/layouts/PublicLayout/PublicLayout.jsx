@@ -139,7 +139,12 @@ export function PublicFooter() {
   const { data: profileData } = useProfile();
   const settings = getIdentitySettings(data?.settings);
   const profile = getIdentityProfile(profileData?.profile);
-  const social = settings?.socialLinks || {};
+  const social = {
+    github: settings?.socialLinks?.github || profile?.socialLinks?.github || identity.github,
+    linkedin:
+      settings?.socialLinks?.linkedin || profile?.socialLinks?.linkedin || identity.linkedin,
+    twitter: settings?.socialLinks?.twitter || profile?.socialLinks?.twitter || "",
+  };
   const year = new Date().getFullYear();
 
   return (

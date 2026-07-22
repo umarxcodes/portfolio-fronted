@@ -1,24 +1,14 @@
 import api from "@/api/client";
 import { endpoints } from "@/api/endpoints";
 
-function qs(params) {
-  const search = new URLSearchParams();
-  Object.entries(params || {}).forEach(([key, value]) => {
-    if (value === undefined || value === null || value === "") return;
-    search.append(key, String(value));
-  });
-  const s = search.toString();
-  return s ? `?${s}` : "";
-}
+import { buildQueryString } from "@/lib/queryString";
 
 export const skillsApi = {
-  list: (params = {}) => api.get(`${endpoints.skills.list}${qs(params)}`),
+  list: (params = {}) => api.get(`${endpoints.skills.list}${buildQueryString(params)}`),
   byCategory: (category, params = {}) =>
-    api.get(`${endpoints.skills.byCategory(category)}${qs(params)}`),
+    api.get(`${endpoints.skills.byCategory(category)}${buildQueryString(params)}`),
   byId: (id) => api.get(endpoints.skills.byId(id)),
   create: (payload) => api.post(endpoints.skills.create, payload),
   update: (id, payload) => api.patch(endpoints.skills.update(id), payload),
   remove: (id) => api.del(endpoints.skills.delete(id)),
 };
-
-export default skillsApi;

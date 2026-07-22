@@ -127,7 +127,13 @@ export default function CertificatesAdminPage() {
       render: (r) => (
         <div className="flex items-center gap-3">
           {r.badgeImage ? (
-            <img src={r.badgeImage} alt="" className="h-8 w-8 rounded object-cover" />
+            <img
+              src={r.badgeImage}
+              alt=""
+              width={32}
+              height={32}
+              className="h-8 w-8 rounded object-cover"
+            />
           ) : (
             <span className="flex h-8 w-8 items-center justify-center rounded bg-brand-500/10 text-brand-500">
               <Award className="h-4 w-4" />

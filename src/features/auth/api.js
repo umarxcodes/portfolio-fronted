@@ -7,5 +7,3 @@ export const authApi = {
   logout: () => api.post(endpoints.auth.logout, {}),
   changePassword: (payload) => api.patch(endpoints.auth.changePassword, payload),
 };
-
-export default authApi;

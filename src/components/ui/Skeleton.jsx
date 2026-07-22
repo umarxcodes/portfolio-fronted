@@ -1,8 +1,9 @@
+import { memo } from "react";
 import { cn } from "@/lib/cn";
 
-export function Skeleton({ className }) {
+export const Skeleton = memo(function Skeleton({ className }) {
   return <div className={cn("skeleton h-4 w-full rounded", className)} />;
-}
+});
 
 export function SkeletonCard({ className }) {
   return (

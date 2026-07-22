@@ -5,5 +5,3 @@ export const profileApi = {
   get: () => api.get(endpoints.profile.get),
   update: (payload) => api.patch(endpoints.profile.update, payload),
 };
-
-export default profileApi;

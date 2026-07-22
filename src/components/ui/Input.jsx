@@ -19,20 +19,37 @@ export const Field = ({ label, error, hint, required, htmlFor, children, classNa
 );
 
 const baseControl =
-  "w-full rounded-md border border-border bg-surface px-3 text-sm text-content-primary placeholder:text-content-muted transition-colors duration-150 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/30 disabled:cursor-not-allowed disabled:opacity-60";
+  "w-full rounded-md border border-border bg-surface text-sm text-content-primary placeholder:text-content-muted transition-colors duration-150 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/30 disabled:cursor-not-allowed disabled:opacity-60";
 
-export const Input = forwardRef(function Input({ className, error, ...props }, ref) {
+export const Input = forwardRef(function Input(
+  { className, error, startAdornment, endAdornment, inputClassName, ...props },
+  ref
+) {
   return (
-    <input
-      ref={ref}
-      className={cn(
-        baseControl,
-        "h-10",
-        error && "border-danger focus:border-danger focus:ring-danger/30",
-        className
+    <div className={cn("relative flex items-center", className)}>
+      {startAdornment && (
+        <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-content-muted">
+          {startAdornment}
+        </span>
       )}
-      {...props}
-    />
+      <input
+        ref={ref}
+        className={cn(
+          baseControl,
+          "h-10",
+          startAdornment && "pl-9",
+          endAdornment && "pr-9",
+          error && "border-danger focus:border-danger focus:ring-danger/30",
+          inputClassName
+        )}
+        {...props}
+      />
+      {endAdornment && (
+        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-content-muted">
+          {endAdornment}
+        </span>
+      )}
+    </div>
   );
 });
 

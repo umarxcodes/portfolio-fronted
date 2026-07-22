@@ -1,18 +1,8 @@
 import api from "@/api/client";
 import { endpoints } from "@/api/endpoints";
 
-function qs(params) {
-  const search = new URLSearchParams();
-  Object.entries(params || {}).forEach(([key, value]) => {
-    if (value === undefined || value === null || value === "") return;
-    search.append(key, String(value));
-  });
-  const s = search.toString();
-  return s ? `?${s}` : "";
-}
+import { buildQueryString } from "@/lib/queryString";
 
 export const searchApi = {
-  query: (params) => api.get(`${endpoints.search.query}${qs(params)}`),
+  query: (params) => api.get(`${endpoints.search.query}${buildQueryString(params)}`),
 };
-
-export default searchApi;
