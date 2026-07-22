@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import { UploadCloud, ImageIcon, File as FileIcon, X, CheckCircle2 } from "lucide-react";
 import { Card, CardBody, Select, EmptyState } from "@/components/ui";
 import { useUploadAsset } from "@/features/uploads";
+import { useUpdateProfile } from "@/features/profile";
 import { useToast } from "@/context";
 import { UPLOAD_FOLDERS } from "@/constants/enums";
 import { validateUploadFile } from "@/lib/validators";
@@ -13,6 +14,7 @@ export default function UploadsAdminPage() {
   const [dragOver, setDragOver] = useState(false);
   const inputRef = useRef(null);
   const upload = useUploadAsset();
+  const updateProfile = useUpdateProfile();
   const { toast } = useToast();
 
   function addFiles(fileList) {
@@ -44,12 +46,18 @@ export default function UploadsAdminPage() {
         onProgress: (p) =>
           setFiles((prev) => prev.map((f) => (f.id === item.id ? { ...f, progress: p } : f))),
       });
+      const resolvedUrl = result.url || (result.upload && result.upload.url) || "";
       setFiles((prev) =>
         prev.map((f) =>
-          f.id === item.id ? { ...f, status: "done", url: result.url, progress: 100 } : f
+          f.id === item.id ? { ...f, status: "done", url: resolvedUrl, progress: 100 } : f
         )
       );
       toast.success("Uploaded");
+
+      if (folder === "resume" && resolvedUrl) {
+        await updateProfile.mutateAsync({ resumeUrl: resolvedUrl });
+        toast.success("Resume saved to profile");
+      }
     } catch (err) {
       setFiles((prev) =>
         prev.map((f) => (f.id === item.id ? { ...f, status: "error", error: err?.message } : f))
