@@ -62,9 +62,10 @@ export const identity = {
   linkedin: "https://www.linkedin.com/in/umarxcodes",
   whatsappNumber: "+923010568885",
   whatsappUrl: "https://wa.me/923010568885",
-  title: "Full Stack Developer",
+  title: "Full-Stack Software Engineer",
   siteDescription:
-    "Muhammad Umar builds production-grade web applications with thoughtful interfaces, reliable APIs, and clear engineering tradeoffs.",
+    "Building scalable web applications, distributed backend systems, and AI-powered products with modern technologies.",
+  yearsOfExperience: 2,
 };
 
 export function getIdentityProfile(profile) {
@@ -77,6 +78,7 @@ export function getIdentityProfile(profile) {
     title: profile?.title || identity.title,
     bio: profile?.bio || identity.siteDescription,
     shortBio: profile?.shortBio || identity.siteDescription,
+    yearsOfExperience: profile?.yearsOfExperience ?? identity.yearsOfExperience,
     socialLinks: {
       github: pick(profile?.socialLinks?.github, identity.github, isPlaceholderUrl),
       linkedin: pick(profile?.socialLinks?.linkedin, identity.linkedin, isPlaceholderUrl),
