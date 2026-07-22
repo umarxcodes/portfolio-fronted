@@ -1,6 +1,15 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { ArrowLeft, Mail, Reply, Trash2, User, Clock } from "lucide-react";
-import { Button, Card, CardBody, Select, ErrorState, EmptyState } from "@/components/ui";
+import { useState } from "react";
+import {
+  Button,
+  Card,
+  CardBody,
+  Select,
+  ErrorState,
+  EmptyState,
+  ConfirmDialog,
+} from "@/components/ui";
 import { PageHeader } from "@/components/common/SectionHeading";
 import { useContactById, useUpdateContactStatus, useDeleteContact } from "@/features/contact";
 import { CONTACT_STATUSES, STATUS_META } from "@/constants/enums";
@@ -12,6 +21,7 @@ export default function ContactDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [deleteOpen, setDeleteOpen] = useState(false);
   const { data, isLoading, isError, error, refetch } = useContactById(id);
   const updateStatus = useUpdateContactStatus();
   const remove = useDeleteContact();
@@ -28,7 +38,6 @@ export default function ContactDetailPage() {
   }
 
   async function handleDelete() {
-    if (!confirm("Delete this message?")) return;
     try {
       await remove.mutateAsync(id);
       toast.success("Message deleted");
@@ -70,7 +79,7 @@ export default function ContactDetailPage() {
               variant="danger"
               size="sm"
               leftIcon={<Trash2 className="h-4 w-4" />}
-              onClick={handleDelete}
+              onClick={() => setDeleteOpen(true)}
             >
               Delete
             </Button>
@@ -131,6 +140,16 @@ export default function ContactDetailPage() {
           </div>
         </CardBody>
       </Card>
+
+      <ConfirmDialog
+        open={deleteOpen}
+        onClose={() => setDeleteOpen(false)}
+        onConfirm={handleDelete}
+        title="Delete message"
+        description="This action cannot be undone. The message will be permanently removed."
+        confirmLabel="Delete"
+        isLoading={remove.isPending}
+      />
     </div>
   );
 }
