@@ -1,4 +1,5 @@
 import { forwardRef } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/cn";
 
 const VARIANTS = {
@@ -35,32 +36,43 @@ const Button = forwardRef(function Button(
   },
   ref
 ) {
+  const prefersReduced = useReducedMotion();
+  const tapAnimation = prefersReduced
+    ? { scale: 1 }
+    : { scale: 0.97, transition: { duration: 0.12, ease: "easeOut" } };
+
   return (
-    <Comp
-      ref={ref}
-      disabled={disabled || isLoading}
-      className={cn(
-        "inline-flex select-none items-center justify-center rounded-md font-medium transition-all duration-200 ease-out-expo hover:-translate-y-0.5 active:translate-y-0 motion-reduce:transform-none motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/60 focus-visible:ring-offset-2 focus-visible:ring-offset-bg-base disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0",
-        VARIANTS[variant],
-        SIZES[size],
-        fullWidth && "w-full",
-        className
-      )}
-      {...props}
+    <motion.div
+      whileTap={tapAnimation}
+      whileHover={prefersReduced ? {} : { y: -1 }}
+      transition={{ duration: 0.18, ease: [0.33, 1, 0.68, 1] }}
     >
-      {isLoading ? (
-        <>
-          <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-          {loadingText || children}
-        </>
-      ) : (
-        <>
-          {leftIcon && <span className="shrink-0">{leftIcon}</span>}
-          {children}
-          {rightIcon && <span className="shrink-0">{rightIcon}</span>}
-        </>
-      )}
-    </Comp>
+      <Comp
+        ref={ref}
+        disabled={disabled || isLoading}
+        className={cn(
+          "inline-flex select-none items-center justify-center rounded-md font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/60 focus-visible:ring-offset-2 focus-visible:ring-offset-bg-base disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0",
+          VARIANTS[variant],
+          SIZES[size],
+          fullWidth && "w-full",
+          className
+        )}
+        {...props}
+      >
+        {isLoading ? (
+          <>
+            <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+            {loadingText || children}
+          </>
+        ) : (
+          <>
+            {leftIcon && <span className="shrink-0">{leftIcon}</span>}
+            {children}
+            {rightIcon && <span className="shrink-0">{rightIcon}</span>}
+          </>
+        )}
+      </Comp>
+    </motion.div>
   );
 });
 

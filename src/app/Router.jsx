@@ -4,6 +4,7 @@ import { PrivateRoute, GuestRoute } from "@/routes/Guards";
 import { PublicLayout } from "@/layouts/PublicLayout/PublicLayout";
 import { DashboardLayout } from "@/layouts/DashboardLayout/DashboardLayout";
 import { RouteFallback } from "@/app/RouteFallback";
+import { PageTransition } from "@/motion";
 import { routes } from "@/constants/routes";
 
 // Public pages
@@ -42,7 +43,7 @@ export function AppRoutes() {
   const location = useLocation();
 
   return (
-    <div key={location.pathname} className="route-transition">
+    <PageTransition>
       <Suspense fallback={<RouteFallback />}>
         <Routes location={location}>
           {/* Public */}
@@ -102,7 +103,7 @@ export function AppRoutes() {
           <Route path="*" element={<Navigate to="/404" replace />} />
         </Routes>
       </Suspense>
-    </div>
+    </PageTransition>
   );
 }
 
