@@ -1,18 +1,32 @@
 import { memo } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/cn";
+import { motionEasing, motionDuration } from "@/motion";
 
 export const Card = memo(function Card({ className, children, hover, ...props }) {
+  const prefersReduced = useReducedMotion();
+  const transition = { duration: motionDuration.base, ease: motionEasing.easeOutExpo };
+
+  if (prefersReduced || !hover) {
+    return (
+      <div
+        className={cn("rounded-lg border border-border bg-surface shadow-sm", className)}
+        {...props}
+      >
+        {children}
+      </div>
+    );
+  }
+
   return (
-    <div
-      className={cn(
-        "rounded-lg border border-border bg-surface shadow-sm transition-all duration-300 ease-out-expo",
-        hover && "hover:-translate-y-0.5 hover:border-brand-500/40 hover:shadow-md",
-        className
-      )}
+    <motion.div
+      className={cn("rounded-lg border border-border bg-surface shadow-sm", className)}
+      whileHover={{ y: -4, boxShadow: "0 10px 25px -12px rgb(var(--shadow-color) / 0.25)" }}
+      transition={transition}
       {...props}
     >
       {children}
-    </div>
+    </motion.div>
   );
 });
 

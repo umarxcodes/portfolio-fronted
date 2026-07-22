@@ -1,10 +1,12 @@
 import { useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { MapPin, ArrowRight, Download, Mail, MessageCircle } from "lucide-react";
 import { GithubIcon, LinkedinIcon, TwitterIcon } from "@/components/common/BrandIcons";
 import { Button, ErrorState } from "@/components/ui";
 import { Reveal } from "@/components/common/Reveal";
 import { AnimatedNumber } from "@/components/common/AnimatedNumber";
+import { FadeImage, AnimatedSection } from "@/motion";
 import { useProfile } from "@/features/profile";
 import { useSettings } from "@/features/settings";
 import { useSkills } from "@/features/skills";
@@ -32,7 +34,7 @@ function HeroPortrait({ profile }) {
   return (
     <div className="relative mx-auto aspect-[4/5] w-full max-w-sm overflow-hidden rounded-2xl border border-border bg-surface shadow-lg">
       {src && imgOk ? (
-        <img
+        <FadeImage
           src={src}
           alt={profile.name}
           width={400}
@@ -69,6 +71,7 @@ function HeroPortrait({ profile }) {
 }
 
 function Hero({ profile, settings }) {
+  const prefersReduced = useReducedMotion();
   const social = {
     github: settings?.socialLinks?.github || profile?.socialLinks?.github || identity.github,
     linkedin:
@@ -77,13 +80,38 @@ function Hero({ profile, settings }) {
     portfolio: profile?.socialLinks?.portfolio || "",
   };
 
+  const container = {
+    hidden: {},
+    visible: {
+      transition: { staggerChildren: 0.08, delayChildren: 0.1 },
+    },
+  };
+
+  const item = {
+    hidden: { opacity: 0, y: 18, filter: "blur(2px)" },
+    visible: {
+      opacity: 1,
+      y: 0,
+      filter: "blur(0px)",
+      transition: { duration: 0.52, ease: [0.16, 1, 0.3, 1] },
+    },
+  };
+
+  const motionProps = prefersReduced ? { initial: false, animate: {} } : {};
+
   return (
     <section className="relative overflow-hidden">
       <div className="surface-grid absolute inset-0 opacity-[0.4]" />
-      <div className="pointer-events-none absolute -top-40 left-1/2 h-[480px] w-[480px] -translate-x-1/2 rounded-full bg-brand-500/20 blur-[120px]" />
-      <div className="container-page relative grid min-h-[88vh] items-center gap-12 py-20 lg:grid-cols-[1.05fr_0.95fr]">
-        <div>
-          <Reveal>
+      <motion.div
+        {...motionProps}
+        initial={{ opacity: 0.6 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1.2, ease: "easeOut" }}
+        className="pointer-events-none absolute -top-40 left-1/2 h-[480px] w-[480px] -translate-x-1/2 rounded-full bg-brand-500/20 blur-[120px]"
+      />
+      <motion.div className="container-page relative grid min-h-[88vh] items-center gap-12 py-20 lg:grid-cols-[1.05fr_0.95fr]">
+        <motion.div variants={container} initial="hidden" animate="visible">
+          <motion.div variants={item}>
             <span className="inline-flex items-center gap-2 rounded-full border border-brand-500/30 bg-brand-500/10 px-3 py-1 text-xs font-medium text-brand-600 dark:text-brand-300">
               <span
                 className={cn(
@@ -95,107 +123,109 @@ function Hero({ profile, settings }) {
                 ? "Available for opportunities"
                 : "Currently focused on active work"}
             </span>
-          </Reveal>
-          <Reveal delay={80}>
-            <h1 className="mt-6 text-5xl font-bold leading-[1.02] tracking-tight text-content-primary sm:text-6xl lg:text-7xl">
-              {profile?.name || settings?.siteTitle || identity.name}
-            </h1>
-          </Reveal>
-          <Reveal delay={140}>
-            <p className="mt-4 text-2xl font-semibold text-gradient">
-              {profile?.title || identity.title}
-            </p>
-          </Reveal>
-          <Reveal delay={200}>
-            <p className="mt-6 max-w-xl text-lg leading-relaxed text-content-secondary">
-              {profile?.bio || settings?.siteDescription || identity.siteDescription}
-            </p>
-          </Reveal>
-          <Reveal delay={260}>
-            <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Button as={Link} to={routes.projects} rightIcon={<ArrowRight className="h-4 w-4" />}>
-                View my work
-              </Button>
-              <Button as={Link} to={routes.contact} variant="secondary">
-                Get in touch
-              </Button>
+          </motion.div>
+          <motion.h1
+            variants={item}
+            className="mt-6 text-5xl font-bold leading-[1.02] tracking-tight text-content-primary sm:text-6xl lg:text-7xl"
+          >
+            {profile?.name || settings?.siteTitle || identity.name}
+          </motion.h1>
+          <motion.p variants={item} className="mt-4 text-2xl font-semibold text-gradient">
+            {profile?.title || identity.title}
+          </motion.p>
+          <motion.p
+            variants={item}
+            className="mt-6 max-w-xl text-lg leading-relaxed text-content-secondary"
+          >
+            {profile?.bio || settings?.siteDescription || identity.siteDescription}
+          </motion.p>
+          <motion.div variants={item} className="mt-8 flex flex-wrap items-center gap-3">
+            <Button as={Link} to={routes.projects} rightIcon={<ArrowRight className="h-4 w-4" />}>
+              View my work
+            </Button>
+            <Button as={Link} to={routes.contact} variant="secondary">
+              Get in touch
+            </Button>
+            <Button
+              as="a"
+              href={identity.whatsappUrl}
+              target="_blank"
+              rel="noreferrer"
+              variant="ghost"
+              leftIcon={<MessageCircle className="h-4 w-4" />}
+            >
+              WhatsApp
+            </Button>
+            {profile?.resumeUrl && (
               <Button
                 as="a"
-                href={identity.whatsappUrl}
-                target="_blank"
+                href={profile.resumeUrl}
+                download
                 rel="noreferrer"
                 variant="ghost"
-                leftIcon={<MessageCircle className="h-4 w-4" />}
+                leftIcon={<Download className="h-4 w-4" />}
               >
-                WhatsApp
+                Resume
               </Button>
-              {profile?.resumeUrl && (
-                <Button
-                  as="a"
-                  href={profile.resumeUrl}
-                  download
-                  rel="noreferrer"
-                  variant="ghost"
-                  leftIcon={<Download className="h-4 w-4" />}
-                >
-                  Resume
-                </Button>
-              )}
-            </div>
-          </Reveal>
-          <Reveal delay={320}>
-            <div className="mt-8 flex flex-wrap items-center gap-5 text-sm text-content-muted">
-              {profile?.location && (
-                <span className="inline-flex items-center gap-1.5">
-                  <MapPin className="h-4 w-4" /> {profile.location}
-                </span>
-              )}
-              {profile?.email && (
-                <a
-                  href={`mailto:${profile.email}`}
-                  className="inline-flex items-center gap-1.5 hover:text-content-primary"
-                >
-                  <Mail className="h-4 w-4" /> {profile.email}
-                </a>
-              )}
-              {social.github && (
-                <a
-                  href={social.github}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="hover:text-content-primary"
-                >
-                  <GithubIcon className="h-4 w-4" />
-                </a>
-              )}
-              {social.linkedin && (
-                <a
-                  href={social.linkedin}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="hover:text-content-primary"
-                >
-                  <LinkedinIcon className="h-4 w-4" />
-                </a>
-              )}
-              {social.twitter && (
-                <a
-                  href={social.twitter}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="hover:text-content-primary"
-                >
-                  <TwitterIcon className="h-4 w-4" />
-                </a>
-              )}
-            </div>
-          </Reveal>
-        </div>
-
-        <Reveal delay={200} className="relative">
+            )}
+          </motion.div>
+          <motion.div
+            variants={item}
+            className="mt-8 flex flex-wrap items-center gap-5 text-sm text-content-muted"
+          >
+            {profile?.location && (
+              <span className="inline-flex items-center gap-1.5">
+                <MapPin className="h-4 w-4" /> {profile.location}
+              </span>
+            )}
+            {profile?.email && (
+              <a
+                href={`mailto:${profile.email}`}
+                className="inline-flex items-center gap-1.5 hover:text-content-primary"
+              >
+                <Mail className="h-4 w-4" /> {profile.email}
+              </a>
+            )}
+            {social.github && (
+              <a
+                href={social.github}
+                target="_blank"
+                rel="noreferrer"
+                className="hover:text-content-primary"
+              >
+                <GithubIcon className="h-4 w-4" />
+              </a>
+            )}
+            {social.linkedin && (
+              <a
+                href={social.linkedin}
+                target="_blank"
+                rel="noreferrer"
+                className="hover:text-content-primary"
+              >
+                <LinkedinIcon className="h-4 w-4" />
+              </a>
+            )}
+            {social.twitter && (
+              <a
+                href={social.twitter}
+                target="_blank"
+                rel="noreferrer"
+                className="hover:text-content-primary"
+              >
+                <TwitterIcon className="h-4 w-4" />
+              </a>
+            )}
+          </motion.div>
+        </motion.div>
+        <motion.div
+          {...motionProps}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
+          className="relative"
+        >
           <HeroPortrait profile={profile} />
-        </Reveal>
-      </div>
+        </motion.div>
+      </motion.div>
     </section>
   );
 }
@@ -276,26 +306,42 @@ export default function HomePage() {
 
       <StatsStrip stats={stats} />
 
-      <FeaturedProjectsSection
-        projects={projects}
-        total={projectsData?.total}
-        isLoading={projLoad}
-      />
+      <AnimatedSection>
+        <FeaturedProjectsSection
+          projects={projects}
+          total={projectsData?.total}
+          isLoading={projLoad}
+        />
+      </AnimatedSection>
 
-      <SkillsSectionWrapper
-        skillGroups={skillGroups}
-        total={skillsData?.total}
-        isLoading={skillsLoad}
-      />
+      <AnimatedSection>
+        <SkillsSectionWrapper
+          skillGroups={skillGroups}
+          total={skillsData?.total}
+          isLoading={skillsLoad}
+        />
+      </AnimatedSection>
 
-      <ExperienceSectionWrapper experiences={experiences} />
+      <AnimatedSection>
+        <ExperienceSectionWrapper experiences={experiences} />
+      </AnimatedSection>
 
-      <EducationCertificatesWrapper education={education} certificates={certificates} />
+      <AnimatedSection>
+        <EducationCertificatesWrapper education={education} certificates={certificates} />
+      </AnimatedSection>
 
-      <BlogSectionWrapper blogs={blogs} />
+      <AnimatedSection>
+        <BlogSectionWrapper blogs={blogs} />
+      </AnimatedSection>
 
       <section className="container-page py-16">
-        <div className="relative overflow-hidden rounded-2xl border border-brand-500/20 bg-gradient-to-br from-brand-500/10 to-accent/10 p-10 text-center sm:p-14">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          className="relative overflow-hidden rounded-2xl border border-brand-500/20 bg-gradient-to-br from-brand-500/10 to-accent/10 p-10 text-center sm:p-14"
+        >
           <h2 className="font-heading text-3xl font-bold text-content-primary sm:text-4xl">
             Let's build something together
           </h2>
@@ -312,7 +358,7 @@ export default function HomePage() {
               Start a conversation
             </Button>
           </div>
-        </div>
+        </motion.div>
       </section>
     </div>
   );

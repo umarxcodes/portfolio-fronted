@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 import { Menu, X, Search } from "lucide-react";
 import { GithubIcon, LinkedinIcon, TwitterIcon } from "@/components/common/BrandIcons";
@@ -8,6 +9,7 @@ import { useSettings } from "@/features/settings";
 import { useProfile } from "@/features/profile";
 import { getIdentityProfile, getIdentitySettings, getInitials, identity } from "@/config/identity";
 import { cn } from "@/lib/cn";
+import { motionEasing, motionDuration } from "@/motion";
 
 const NAV = [
   { to: "/", label: "Home", end: true },
@@ -22,6 +24,7 @@ export function PublicNavbar() {
   const location = useLocation();
   const { data } = useSettings();
   const { data: profileData } = useProfile();
+  const prefersReduced = useReducedMotion();
   const settings = getIdentitySettings(data?.settings);
   const profile = getIdentityProfile(profileData?.profile);
 
@@ -37,7 +40,10 @@ export function PublicNavbar() {
   const brand = profile.name || settings.siteTitle || identity.name;
 
   return (
-    <header
+    <motion.header
+      initial={prefersReduced ? false : { y: -20, opacity: 0 }}
+      animate={prefersReduced ? {} : { y: 0, opacity: 1 }}
+      transition={{ duration: motionDuration.base, ease: motionEasing.easeOutExpo }}
       className={cn(
         "sticky top-0 z-40 border-b transition-colors duration-300",
         scrolled
@@ -47,9 +53,13 @@ export function PublicNavbar() {
     >
       <nav className="container-page flex h-16 items-center justify-between gap-4">
         <Link to="/" className="group flex items-center gap-2.5">
-          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-brand-500 font-heading text-sm font-bold tracking-tight text-brand-fg shadow-sm transition-transform group-hover:scale-105">
+          <motion.span
+            whileHover={prefersReduced ? {} : { scale: 1.05 }}
+            whileTap={prefersReduced ? {} : { scale: 0.95 }}
+            className="flex h-9 w-9 items-center justify-center rounded-lg bg-brand-500 font-heading text-sm font-bold tracking-tight text-brand-fg shadow-sm transition-transform"
+          >
             {getInitials(brand) || identity.monogram}
-          </span>
+          </motion.span>
           <span className="font-heading text-lg font-bold tracking-tight text-content-primary">
             {brand}
           </span>
@@ -63,14 +73,28 @@ export function PublicNavbar() {
               end={item.end}
               className={({ isActive }) =>
                 cn(
-                  "rounded-md px-3.5 py-2 text-sm font-medium transition-colors",
+                  "relative rounded-md px-3.5 py-2 text-sm font-medium transition-colors",
                   isActive
                     ? "text-content-primary"
                     : "text-content-secondary hover:text-content-primary"
                 )
               }
             >
-              {item.label}
+              {({ isActive }) => (
+                <>
+                  {item.label}
+                  {isActive && (
+                    <motion.span
+                      layoutId="nav-indicator"
+                      className="absolute inset-x-1 -bottom-1 h-0.5 rounded-full bg-brand-500"
+                      transition={{
+                        duration: motionDuration.fast,
+                        ease: motionEasing.easeOutCubic,
+                      }}
+                    />
+                  )}
+                </>
+              )}
             </NavLink>
           ))}
         </div>
@@ -93,19 +117,26 @@ export function PublicNavbar() {
           >
             Admin
           </Button>
-          <button
+          <motion.button
             type="button"
             onClick={() => setOpen((v) => !v)}
             aria-label="Menu"
+            whileTap={prefersReduced ? {} : { scale: 0.92 }}
             className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-border text-content-secondary md:hidden"
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </button>
+          </motion.button>
         </div>
       </nav>
 
       {open && (
-        <div className="border-t border-border bg-bg-base md:hidden">
+        <motion.div
+          initial={prefersReduced ? false : { opacity: 0, y: -8 }}
+          animate={prefersReduced ? {} : { opacity: 1, y: 0 }}
+          exit={prefersReduced ? {} : { opacity: 0, y: -8 }}
+          transition={{ duration: motionDuration.fast, ease: motionEasing.easeOutCubic }}
+          className="border-t border-border bg-bg-base md:hidden"
+        >
           <div className="container-page flex flex-col gap-1 py-3">
             {NAV.map((item) => (
               <NavLink
@@ -128,9 +159,9 @@ export function PublicNavbar() {
               </Button>
             </div>
           </div>
-        </div>
+        </motion.div>
       )}
-    </header>
+    </motion.header>
   );
 }
 
