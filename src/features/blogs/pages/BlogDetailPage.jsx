@@ -85,6 +85,8 @@ export default function BlogDetailPage() {
         <img
           src={post.coverImage}
           alt={post.title}
+          width={1280}
+          height={720}
           className="mt-8 aspect-video w-full rounded-xl border border-border object-cover"
         />
       )}

@@ -9,5 +9,3 @@ export const analyticsApi = {
   blogs: () => api.get(endpoints.analytics.blogs),
   contact: () => api.get(endpoints.analytics.contact),
 };
-
-export default analyticsApi;

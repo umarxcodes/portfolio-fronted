@@ -82,7 +82,13 @@ export function FileUploadField({
         <div className="flex items-center gap-3 rounded-md border border-border bg-surface p-2.5">
           <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded bg-bg-muted">
             {isImage ? (
-              <img src={value} alt="" className="h-full w-full object-cover" />
+              <img
+                src={value}
+                alt=""
+                width={48}
+                height={48}
+                className="h-full w-full object-cover"
+              />
             ) : (
               <FileText className="h-5 w-5 text-content-muted" />
             )}

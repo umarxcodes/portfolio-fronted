@@ -7,5 +7,3 @@ export const uploadsApi = {
   byId: (id) => api.get(endpoints.uploads.byId(id)),
   remove: (id) => api.del(endpoints.uploads.delete(id)),
 };
-
-export default uploadsApi;

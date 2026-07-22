@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { cn } from "@/lib/cn";
 
 const TONES = {
@@ -10,7 +11,7 @@ const TONES = {
   accent: "bg-accent/10 text-accent border-accent/20",
 };
 
-export function Badge({ children, tone = "neutral", className, size = "md" }) {
+export const Badge = memo(function Badge({ children, tone = "neutral", className, size = "md" }) {
   return (
     <span
       className={cn(
@@ -23,6 +24,6 @@ export function Badge({ children, tone = "neutral", className, size = "md" }) {
       {children}
     </span>
   );
-}
+});
 
 export default Badge;

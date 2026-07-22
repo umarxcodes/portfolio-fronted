@@ -5,5 +5,3 @@ export const settingsApi = {
   get: () => api.get(endpoints.settings.get),
   update: (payload) => api.patch(endpoints.settings.update, payload),
 };
-
-export default settingsApi;

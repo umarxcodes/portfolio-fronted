@@ -100,6 +100,8 @@ export default function ProjectDetailPage() {
         <img
           src={project.thumbnail}
           alt={project.title}
+          width={1280}
+          height={720}
           className="mt-8 aspect-video w-full rounded-xl border border-border object-cover"
         />
       )}
@@ -118,6 +120,9 @@ export default function ProjectDetailPage() {
                   key={i}
                   src={img}
                   alt={`${project.title} screenshot ${i + 1}`}
+                  width={640}
+                  height={360}
+                  loading="lazy"
                   className="rounded-lg border border-border object-cover"
                 />
               ))}

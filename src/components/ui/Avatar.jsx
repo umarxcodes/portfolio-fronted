@@ -1,7 +1,8 @@
+import { memo } from "react";
 import { cn } from "@/lib/cn";
 import { initials } from "@/lib/format";
 
-export function Avatar({ src, name = "", size = "md", className }) {
+export const Avatar = memo(function Avatar({ src, name = "", size = "md", className }) {
   const sizes = {
     sm: "h-8 w-8 text-xs",
     md: "h-10 w-10 text-sm",
@@ -13,6 +14,8 @@ export function Avatar({ src, name = "", size = "md", className }) {
       <img
         src={src}
         alt={name}
+        width={size === "sm" ? 32 : size === "lg" ? 56 : size === "xl" ? 80 : 40}
+        height={size === "sm" ? 32 : size === "lg" ? 56 : size === "xl" ? 80 : 40}
         className={cn("rounded-full object-cover ring-2 ring-border", sizes[size], className)}
       />
     );
@@ -28,6 +31,6 @@ export function Avatar({ src, name = "", size = "md", className }) {
       {initials(name)}
     </span>
   );
-}
+});
 
 export default Avatar;

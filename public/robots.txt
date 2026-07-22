@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+
+Sitemap: https://umarxcodes.github.io/portfolio-fronted/sitemap.xml
