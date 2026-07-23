@@ -62,7 +62,7 @@ export const identity = {
   linkedin: "https://www.linkedin.com/in/umarxcodes",
   whatsappNumber: "+923010568885",
   whatsappUrl: "https://wa.me/923010568885",
-  title: "Full-Stack Software Engineer",
+  title: "Full-Stack Engineer",
   siteDescription:
     "Building scalable web applications, distributed backend systems, and AI-powered products with modern technologies.",
   yearsOfExperience: 2,
