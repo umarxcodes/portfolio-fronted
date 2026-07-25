@@ -6,10 +6,10 @@ export const createSkillSchema = z
     name: z.string().trim().min(1),
     category: skillCategoryEnum,
     level: skillLevelEnum,
-    yearsOfExperience: z.number().min(0).max(50),
+    yearsOfExperience: z.coerce.number().min(0).max(50),
     icon: z.string().trim().optional(),
     description: z.string().optional(),
-    displayOrder: z.number().optional(),
+    displayOrder: z.coerce.number().optional(),
   })
   .strict();
 
