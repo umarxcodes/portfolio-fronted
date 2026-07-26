@@ -1,6 +1,7 @@
 import { useParams, useNavigate, useSearchParams, Link } from "react-router-dom";
 import { Clock } from "lucide-react";
 import { Pagination, EmptyState, ErrorState, SkeletonCard } from "@/components/ui";
+import { Reveal } from "@/components/common/Reveal";
 import { useBlogs, useBlogsByCategory, useBlogsByTag } from "@/features/blogs";
 import { DEFAULT_PAGE_SIZE } from "@/constants/pagination";
 import { truncate, formatDate, titleCase } from "@/lib/format";
@@ -33,13 +34,19 @@ export default function BlogPage() {
   return (
     <div className="container-page py-14">
       <header className="mb-10">
-        <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-brand-500">
-          Writing
-        </p>
-        <h1 className="text-4xl font-bold tracking-tight text-content-primary sm:text-5xl">
-          {title}
-        </h1>
-        <p className="mt-3 max-w-2xl text-content-secondary">{subtitle}</p>
+        <Reveal>
+          <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-brand-500">
+            Writing
+          </p>
+        </Reveal>
+        <Reveal delay={80}>
+          <h1 className="text-4xl font-bold tracking-tight text-content-primary sm:text-5xl">
+            {title}
+          </h1>
+        </Reveal>
+        <Reveal delay={140}>
+          <p className="mt-3 max-w-2xl text-content-secondary">{subtitle}</p>
+        </Reveal>
       </header>
 
       {isError ? (
@@ -61,49 +68,49 @@ export default function BlogPage() {
             )}
           >
             {items.map((post, i) => (
-              <Link
-                key={post._id}
-                to={`/blog/${post.slug}`}
-                className="group flex h-full flex-col overflow-hidden rounded-lg border border-border bg-surface shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-brand-500/40 hover:shadow-md"
-                style={{ animationDelay: `${(i % 9) * 50}ms` }}
-              >
-                {post.coverImage && (
-                  <div className="aspect-video overflow-hidden">
-                    <img
-                      src={post.coverImage}
-                      alt={post.title}
-                      width={640}
-                      height={360}
-                      loading="lazy"
-                      className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                    />
-                  </div>
-                )}
-                <div className="flex flex-1 flex-col p-5">
-                  <div className="flex items-center gap-2">
-                    <span className="rounded-full bg-brand-500/10 px-2.5 py-1 text-xs font-medium text-brand-600 dark:text-brand-300">
-                      {post.category}
-                    </span>
-                    {post.featured && (
-                      <span className="rounded-full bg-warning/10 px-2.5 py-1 text-xs font-medium text-warning">
-                        Featured
+              <Reveal key={post._id} delay={(i % 9) * 60}>
+                <Link
+                  to={`/blog/${post.slug}`}
+                  className="group flex h-full flex-col overflow-hidden rounded-lg border border-border bg-surface shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-brand-500/40 hover:shadow-md"
+                >
+                  {post.coverImage && (
+                    <div className="aspect-video overflow-hidden">
+                      <img
+                        src={post.coverImage}
+                        alt={post.title}
+                        width={640}
+                        height={360}
+                        loading="lazy"
+                        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      />
+                    </div>
+                  )}
+                  <div className="flex flex-1 flex-col p-5">
+                    <div className="flex items-center gap-2">
+                      <span className="rounded-full bg-brand-500/10 px-2.5 py-1 text-xs font-medium text-brand-600 dark:text-brand-300">
+                        {post.category}
                       </span>
-                    )}
+                      {post.featured && (
+                        <span className="rounded-full bg-warning/10 px-2.5 py-1 text-xs font-medium text-warning">
+                          Featured
+                        </span>
+                      )}
+                    </div>
+                    <h3 className="mt-3 font-heading text-lg font-bold text-content-primary group-hover:text-brand-500">
+                      {post.title}
+                    </h3>
+                    <p className="mt-2 flex-1 text-sm leading-relaxed text-content-secondary">
+                      {truncate(post.excerpt, 110)}
+                    </p>
+                    <div className="mt-4 flex items-center justify-between text-2xs text-content-muted">
+                      <span>{formatDate(post.publishedAt)}</span>
+                      <span className="inline-flex items-center gap-1">
+                        <Clock className="h-3.5 w-3.5" /> {post.readingTime} min
+                      </span>
+                    </div>
                   </div>
-                  <h3 className="mt-3 font-heading text-lg font-bold text-content-primary group-hover:text-brand-500">
-                    {post.title}
-                  </h3>
-                  <p className="mt-2 flex-1 text-sm leading-relaxed text-content-secondary">
-                    {truncate(post.excerpt, 110)}
-                  </p>
-                  <div className="mt-4 flex items-center justify-between text-2xs text-content-muted">
-                    <span>{formatDate(post.publishedAt)}</span>
-                    <span className="inline-flex items-center gap-1">
-                      <Clock className="h-3.5 w-3.5" /> {post.readingTime} min
-                    </span>
-                  </div>
-                </div>
-              </Link>
+                </Link>
+              </Reveal>
             ))}
           </div>
           <div className="mt-10">

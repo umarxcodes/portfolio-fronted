@@ -173,44 +173,32 @@ export default function ProfileAdminPage() {
           </CardHeader>
           <CardBody className="space-y-4">
             <Field label="GitHub" error={errors.socialLinks?.github?.message}>
-              <div className="relative">
-                <GithubIcon className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-content-muted" />
-                <Input
-                  className="pl-10"
-                  placeholder="https://github.com/…"
-                  {...register("socialLinks.github")}
-                />
-              </div>
+              <Input
+                startAdornment={<GithubIcon className="h-4 w-4" />}
+                placeholder="https://github.com/…"
+                {...register("socialLinks.github")}
+              />
             </Field>
             <Field label="LinkedIn" error={errors.socialLinks?.linkedin?.message}>
-              <div className="relative">
-                <LinkedinIcon className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-content-muted" />
-                <Input
-                  className="pl-10"
-                  placeholder="https://linkedin.com/in/…"
-                  {...register("socialLinks.linkedin")}
-                />
-              </div>
+              <Input
+                startAdornment={<LinkedinIcon className="h-4 w-4" />}
+                placeholder="https://linkedin.com/in/…"
+                {...register("socialLinks.linkedin")}
+              />
             </Field>
             <Field label="Portfolio" error={errors.socialLinks?.portfolio?.message}>
-              <div className="relative">
-                <Link2 className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-content-muted" />
-                <Input
-                  className="pl-10"
-                  placeholder="https://…"
-                  {...register("socialLinks.portfolio")}
-                />
-              </div>
+              <Input
+                startAdornment={<Link2 className="h-4 w-4" />}
+                placeholder="https://…"
+                {...register("socialLinks.portfolio")}
+              />
             </Field>
             <Field label="Twitter / X" error={errors.socialLinks?.twitter?.message}>
-              <div className="relative">
-                <TwitterIcon className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-content-muted" />
-                <Input
-                  className="pl-10"
-                  placeholder="https://twitter.com/…"
-                  {...register("socialLinks.twitter")}
-                />
-              </div>
+              <Input
+                startAdornment={<TwitterIcon className="h-4 w-4" />}
+                placeholder="https://twitter.com/…"
+                {...register("socialLinks.twitter")}
+              />
             </Field>
           </CardBody>
         </Card>

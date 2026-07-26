@@ -39,39 +39,49 @@ export default function ProjectsPage() {
   return (
     <div className="container-page py-14">
       <header className="mb-10">
-        <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-brand-500">
-          Portfolio
-        </p>
-        <h1 className="text-4xl font-bold tracking-tight text-content-primary sm:text-5xl">
-          Projects
-        </h1>
-        <p className="mt-3 max-w-2xl text-content-secondary">
-          Selected engineering work across frontend, backend, and full-stack systems.
-        </p>
+        <Reveal>
+          <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-brand-500">
+            Portfolio
+          </p>
+        </Reveal>
+        <Reveal delay={80}>
+          <h1 className="text-4xl font-bold tracking-tight text-content-primary sm:text-5xl">
+            Projects
+          </h1>
+        </Reveal>
+        <Reveal delay={140}>
+          <p className="mt-3 max-w-2xl text-content-secondary">
+            Selected engineering work across frontend, backend, and full-stack systems.
+          </p>
+        </Reveal>
       </header>
 
-      <div className="mb-8 flex flex-wrap gap-2">
-        <Button
-          variant={activeCat ? "secondary" : "primary"}
-          size="sm"
-          onClick={() => selectCategory("")}
-        >
-          All
-        </Button>
-        {PROJECT_CATEGORIES.map((cat) => (
+      <Reveal delay={180}>
+        <div className="mb-8 flex flex-wrap gap-2">
           <Button
-            key={cat}
-            variant={activeCat === cat ? "primary" : "secondary"}
+            variant={activeCat ? "secondary" : "primary"}
             size="sm"
-            onClick={() => selectCategory(cat)}
+            onClick={() => selectCategory("")}
           >
-            {titleCase(cat)}
+            All
           </Button>
-        ))}
-      </div>
+          {PROJECT_CATEGORIES.map((cat) => (
+            <Button
+              key={cat}
+              variant={activeCat === cat ? "primary" : "secondary"}
+              size="sm"
+              onClick={() => selectCategory(cat)}
+            >
+              {titleCase(cat)}
+            </Button>
+          ))}
+        </div>
+      </Reveal>
 
       {isError ? (
-        <ErrorState message={getErrorMessage(error)} onRetry={listQuery.refetch} />
+        <Reveal delay={80}>
+          <ErrorState message={getErrorMessage(error)} onRetry={listQuery.refetch} />
+        </Reveal>
       ) : isLoading ? (
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {Array.from({ length: 6 }).map((_, i) => (
@@ -79,11 +89,13 @@ export default function ProjectsPage() {
           ))}
         </div>
       ) : items.length === 0 ? (
-        <EmptyState
-          icon="empty"
-          title="No projects yet"
-          description="Check back soon or filter by a different category."
-        />
+        <Reveal delay={80}>
+          <EmptyState
+            icon="empty"
+            title="No projects yet"
+            description="Check back soon or filter by a different category."
+          />
+        </Reveal>
       ) : (
         <>
           <div className={cnGrid(isFetching)}>
@@ -138,13 +150,15 @@ export default function ProjectsPage() {
               </Reveal>
             ))}
           </div>
-          <div className="mt-10">
-            <Pagination
-              page={pagination?.page}
-              totalPages={pagination?.totalPages}
-              onChange={(p) => navigate(`?page=${p}`)}
-            />
-          </div>
+          <Reveal delay={100}>
+            <div className="mt-10">
+              <Pagination
+                page={pagination?.page}
+                totalPages={pagination?.totalPages}
+                onChange={(p) => navigate(`?page=${p}`)}
+              />
+            </div>
+          </Reveal>
         </>
       )}
     </div>

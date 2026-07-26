@@ -10,7 +10,7 @@ import {
   ErrorState,
   Pagination,
 } from "@/components/ui";
-import { PageHeader } from "@/components/common/SectionHeading";
+import { Reveal } from "@/components/common/Reveal";
 import { useProjects, useDeleteProject } from "@/features/projects";
 import { STATUS_META } from "@/constants/enums";
 import { ADMIN_PAGE_SIZE } from "@/constants/pagination";
@@ -85,7 +85,6 @@ export default function ProjectsAdminPage() {
             as="a"
             href={`/projects/${row.slug}`}
             target="_blank"
-            className="h-8 w-8"
           >
             <Eye className="h-4 w-4" />
           </Button>
@@ -94,7 +93,6 @@ export default function ProjectsAdminPage() {
             size="icon"
             aria-label="Edit"
             onClick={() => navigate(routes.admin.projectEdit.replace(":id", row._id))}
-            className="h-8 w-8"
           >
             <Pencil className="h-4 w-4" />
           </Button>
@@ -103,7 +101,7 @@ export default function ProjectsAdminPage() {
             size="icon"
             aria-label="Delete"
             onClick={() => setToDelete(row)}
-            className="h-8 w-8 text-danger"
+            className="text-danger"
           >
             <Trash2 className="h-4 w-4" />
           </Button>
@@ -114,38 +112,53 @@ export default function ProjectsAdminPage() {
 
   return (
     <div>
-      <PageHeader
-        title="Projects"
-        description="Manage the work showcased on your public site."
-        actions={
+      <Reveal>
+        <div className="mb-8 flex items-end justify-between gap-4">
+          <div>
+            <h1 className="font-heading text-2xl font-bold text-content-primary">Projects</h1>
+            <p className="mt-1 text-sm text-content-secondary">
+              Manage the work showcased on your public site.
+            </p>
+          </div>
           <Button
             leftIcon={<Plus className="h-4 w-4" />}
             onClick={() => navigate(routes.admin.projectNew)}
           >
             New project
           </Button>
-        }
-      />
+        </div>
+      </Reveal>
 
       {isError ? (
-        <ErrorState message={getErrorMessage(error)} onRetry={refetch} />
+        <Reveal delay={80}>
+          <ErrorState message={getErrorMessage(error)} onRetry={refetch} />
+        </Reveal>
       ) : items.length === 0 && !isLoading ? (
-        <EmptyState
-          icon="empty"
-          title="No projects"
-          description="Create your first project to showcase your work."
-          action={
-            <Button
-              leftIcon={<Plus className="h-4 w-4" />}
-              onClick={() => navigate(routes.admin.projectNew)}
-            >
-              New project
-            </Button>
-          }
-        />
+        <Reveal delay={80}>
+          <EmptyState
+            icon="empty"
+            title="No projects"
+            description="Create your first project to showcase your work."
+            action={
+              <Button
+                leftIcon={<Plus className="h-4 w-4" />}
+                onClick={() => navigate(routes.admin.projectNew)}
+              >
+                New project
+              </Button>
+            }
+          />
+        </Reveal>
       ) : (
         <>
-          <DataTable columns={columns} data={items} loading={isLoading} emptyTitle="No projects" />
+          <Reveal delay={80}>
+            <DataTable
+              columns={columns}
+              data={items}
+              loading={isLoading}
+              emptyTitle="No projects"
+            />
+          </Reveal>
           <div className="mt-6">
             <Pagination
               page={pagination?.page}
