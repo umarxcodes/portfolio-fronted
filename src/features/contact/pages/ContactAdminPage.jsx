@@ -10,6 +10,7 @@ import {
   Select,
   Tabs,
 } from "@/components/ui";
+import { Reveal } from "@/components/common/Reveal";
 import { PageHeader } from "@/components/common/SectionHeading";
 import { useContacts, useUpdateContactStatus } from "@/features/contact";
 import { CONTACT_STATUSES, STATUS_META } from "@/constants/enums";
@@ -104,33 +105,48 @@ export default function ContactAdminPage() {
 
   return (
     <div>
-      <PageHeader
-        title="Messages"
-        description="Inbound contact submissions from your public form."
-      />
-
-      <div className="mb-5">
-        <Tabs
-          tabs={tabs}
-          value={status}
-          onChange={(v) => {
-            setStatus(v);
-            setPage(1);
-          }}
+      <Reveal>
+        <PageHeader
+          title="Messages"
+          description="Inbound contact submissions from your public form."
         />
-      </div>
+      </Reveal>
+
+      <Reveal delay={80}>
+        <div className="mb-5">
+          <Tabs
+            tabs={tabs}
+            value={status}
+            onChange={(v) => {
+              setStatus(v);
+              setPage(1);
+            }}
+          />
+        </div>
+      </Reveal>
 
       {isError ? (
-        <ErrorState message={getErrorMessage(error)} onRetry={refetch} />
+        <Reveal delay={100}>
+          <ErrorState message={getErrorMessage(error)} onRetry={refetch} />
+        </Reveal>
       ) : items.length === 0 && !isLoading ? (
-        <EmptyState
-          icon="empty"
-          title="No messages"
-          description="Submissions from your contact form will appear here."
-        />
+        <Reveal delay={100}>
+          <EmptyState
+            icon="empty"
+            title="No messages"
+            description="Submissions from your contact form will appear here."
+          />
+        </Reveal>
       ) : (
         <>
-          <DataTable columns={columns} data={items} loading={isLoading} emptyTitle="No messages" />
+          <Reveal delay={100}>
+            <DataTable
+              columns={columns}
+              data={items}
+              loading={isLoading}
+              emptyTitle="No messages"
+            />
+          </Reveal>
           <div className="mt-6">
             <Pagination
               page={data?.pagination?.page}

@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useLocation, useNavigate, Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import { Lock, Mail } from "lucide-react";
 import { Button, Field, Input } from "@/components/ui";
 import { loginSchema } from "@/features/auth/validation";
@@ -9,6 +10,16 @@ import { useToast } from "@/context";
 import { getErrorMessage } from "@/lib/errorHandler";
 import { routes } from "@/constants/routes";
 import { identity } from "@/config/identity";
+import { motionEasing, motionDuration } from "@/motion/constants";
+
+const formVariants = {
+  hidden: { opacity: 0, y: 16 },
+  visible: (i = 0) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: motionDuration.base, ease: motionEasing.easeOutExpo, delay: i * 0.08 },
+  }),
+};
 
 export default function LoginPage() {
   const login = useLogin();
@@ -42,7 +53,19 @@ export default function LoginPage() {
         <div className="surface-grid absolute inset-0 opacity-30" />
         <div className="absolute -top-32 left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-brand-500/20 blur-[120px]" />
       </div>
-      <div className="relative w-full max-w-md">
+      <motion.div
+        className="relative w-full max-w-md"
+        initial="hidden"
+        animate="visible"
+        variants={{
+          hidden: { opacity: 0, y: 20 },
+          visible: {
+            opacity: 1,
+            y: 0,
+            transition: { duration: motionDuration.slow, ease: motionEasing.easeOutExpo },
+          },
+        }}
+      >
         <div className="mb-8 text-center">
           <Link to="/" className="inline-flex items-center gap-2">
             <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-brand-500 font-heading text-sm font-bold text-brand-fg">
@@ -52,53 +75,61 @@ export default function LoginPage() {
               {identity.name}
             </span>
           </Link>
-          <h1 className="mt-6 font-heading text-2xl font-bold text-content-primary">
+          <motion.h1
+            className="mt-6 font-heading text-2xl font-bold text-content-primary"
+            custom={1}
+            variants={formVariants}
+          >
             Admin sign in
-          </h1>
-          <p className="mt-2 text-sm text-content-secondary">
+          </motion.h1>
+          <motion.p
+            className="mt-2 text-sm text-content-secondary"
+            custom={2}
+            variants={formVariants}
+          >
             Access the control center to manage your content.
-          </p>
+          </motion.p>
         </div>
 
-        <form
+        <motion.form
           onSubmit={handleSubmit(onSubmit)}
           className="space-y-4 rounded-xl border border-border bg-surface p-6 shadow-sm"
+          custom={3}
+          variants={formVariants}
         >
           <Field label="Email" required error={errors.email?.message}>
-            <div className="relative">
-              <Mail className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-content-muted" />
-              <Input
-                type="email"
-                placeholder="admin@example.com"
-                className="pl-10"
-                error={errors.email}
-                {...register("email")}
-              />
-            </div>
+            <Input
+              type="email"
+              placeholder="admin@example.com"
+              error={errors.email}
+              startAdornment={<Mail className="h-4 w-4" />}
+              {...register("email")}
+            />
           </Field>
           <Field label="Password" required error={errors.password?.message}>
-            <div className="relative">
-              <Lock className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-content-muted" />
-              <Input
-                type="password"
-                placeholder="••••••••"
-                className="pl-10"
-                error={errors.password}
-                {...register("password")}
-              />
-            </div>
+            <Input
+              type="password"
+              placeholder="••••••••"
+              error={errors.password}
+              startAdornment={<Lock className="h-4 w-4" />}
+              {...register("password")}
+            />
           </Field>
           <Button type="submit" fullWidth isLoading={login.isPending} loadingText="Signing in…">
             Sign in
           </Button>
-        </form>
+        </motion.form>
 
-        <p className="mt-6 text-center text-sm text-content-muted">
+        <motion.p
+          className="mt-6 text-center text-sm text-content-muted"
+          custom={4}
+          variants={formVariants}
+        >
           <Link to="/" className="text-brand-500 hover:underline">
             ← Back to site
           </Link>
-        </p>
-      </div>
+        </motion.p>
+      </motion.div>
     </div>
   );
 }

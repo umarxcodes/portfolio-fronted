@@ -1,16 +1,13 @@
 import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/context";
+import { LoadingOverlay } from "@/components/ui";
 
 export function PrivateRoute({ children }) {
   const { isAuthenticated, isLoading } = useAuth();
   const location = useLocation();
 
   if (isLoading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-bg-base">
-        <span className="h-8 w-8 animate-spin rounded-full border-2 border-brand-500 border-t-transparent" />
-      </div>
-    );
+    return <LoadingOverlay label="Loading session…" />;
   }
 
   if (!isAuthenticated) {
@@ -21,7 +18,7 @@ export function PrivateRoute({ children }) {
 
 export function GuestRoute({ children }) {
   const { isAuthenticated, isLoading } = useAuth();
-  if (isLoading) return null;
+  if (isLoading) return children;
   if (isAuthenticated) return <Navigate to="/admin" replace />;
   return children;
 }

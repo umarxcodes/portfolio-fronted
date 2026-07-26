@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Search, X } from "lucide-react";
 import { Input, Tabs, EmptyState, ErrorState, Spinner } from "@/components/ui";
 import { Field } from "@/components/ui";
+import { Reveal } from "@/components/common/Reveal";
 import { useSearch } from "@/features/search";
 import { useDebounce } from "@/hooks";
 import { SEARCH_TYPES } from "@/constants/enums";
@@ -63,40 +64,48 @@ export default function SearchPage() {
   return (
     <div className="container-page max-w-3xl py-14">
       <header className="mb-8">
-        <h1 className="text-4xl font-bold tracking-tight text-content-primary sm:text-5xl">
-          Search
-        </h1>
-        <p className="mt-3 text-content-secondary">
-          Find projects, posts, skills, and credentials across the portfolio.
-        </p>
+        <Reveal>
+          <h1 className="text-4xl font-bold tracking-tight text-content-primary sm:text-5xl">
+            Search
+          </h1>
+        </Reveal>
+        <Reveal delay={80}>
+          <p className="mt-3 text-content-secondary">
+            Find projects, posts, skills, and credentials across the portfolio.
+          </p>
+        </Reveal>
       </header>
 
-      <Field label="Query">
-        <div className="relative">
-          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-content-muted" />
-          <Input
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search the portfolio…"
-            className="pl-10 pr-10"
-            autoFocus
-          />
-          {query && (
-            <button
-              type="button"
-              onClick={() => setQuery("")}
-              aria-label="Clear"
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-content-muted hover:text-content-primary"
-            >
-              <X className="h-4 w-4" />
-            </button>
-          )}
-        </div>
-      </Field>
+      <Reveal delay={120}>
+        <Field label="Query">
+          <div className="relative">
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-content-muted" />
+            <Input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search the portfolio…"
+              className="pl-10 pr-10"
+              autoFocus
+            />
+            {query && (
+              <button
+                type="button"
+                onClick={() => setQuery("")}
+                aria-label="Clear"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-content-muted hover:text-content-primary"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            )}
+          </div>
+        </Field>
+      </Reveal>
 
-      <div className="mt-4">
-        <Tabs tabs={tabs} value={type} onChange={setType} />
-      </div>
+      <Reveal delay={160}>
+        <div className="mt-4">
+          <Tabs tabs={tabs} value={type} onChange={setType} />
+        </div>
+      </Reveal>
 
       <div className="mt-6">
         {!debounced.trim() ? (
@@ -119,25 +128,24 @@ export default function SearchPage() {
           />
         ) : (
           <div className={cn("space-y-6 transition-opacity", isFetching && "opacity-60")}>
-            {buckets.map(([bucket, result]) => (
-              <section
-                key={bucket}
-                className="overflow-hidden rounded-lg border border-border bg-surface"
-              >
-                <div className="flex items-center justify-between border-b border-border px-4 py-3">
-                  <h2 className="font-heading text-sm font-bold uppercase tracking-wide text-content-primary">
-                    {LABELS[bucket] || bucket}
-                  </h2>
-                  <span className="text-2xs text-content-muted">
-                    {result.pagination?.total ?? result.items.length} results
-                  </span>
-                </div>
-                <div>
-                  {result.items.map((item) => (
-                    <ResultRow key={item._id} item={item} />
-                  ))}
-                </div>
-              </section>
+            {buckets.map(([bucket, result], i) => (
+              <Reveal key={bucket} delay={i * 60}>
+                <section className="overflow-hidden rounded-lg border border-border bg-surface">
+                  <div className="flex items-center justify-between border-b border-border px-4 py-3">
+                    <h2 className="font-heading text-sm font-bold uppercase tracking-wide text-content-primary">
+                      {LABELS[bucket] || bucket}
+                    </h2>
+                    <span className="text-2xs text-content-muted">
+                      {result.pagination?.total ?? result.items.length} results
+                    </span>
+                  </div>
+                  <div>
+                    {result.items.map((item) => (
+                      <ResultRow key={item._id} item={item} />
+                    ))}
+                  </div>
+                </section>
+              </Reveal>
             ))}
           </div>
         )}

@@ -1,11 +1,18 @@
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import { Compass } from "lucide-react";
 import { Button } from "@/components/ui";
 import { routes } from "@/constants/routes";
+import { motionEasing, motionDuration } from "@/motion/constants";
 
 export default function NotFoundPage() {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-bg-base px-4 text-center">
+    <motion.div
+      className="flex min-h-screen flex-col items-center justify-center bg-bg-base px-4 text-center"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: motionDuration.slow, ease: motionEasing.easeOutExpo }}
+    >
       <span className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-500/10 text-brand-500">
         <Compass className="h-8 w-8" />
       </span>
@@ -24,6 +31,6 @@ export default function NotFoundPage() {
           View projects
         </Button>
       </div>
-    </div>
+    </motion.div>
   );
 }
