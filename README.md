@@ -1,11 +1,10 @@
 # Portfolio Frontend
 
-Production-grade portfolio frontend for **Muhammad Umar**, Full-Stack Software Engineer. Built with React, Tailwind CSS, and Motion. Designed for performance, accessibility, and maintainability.
+Production-grade portfolio frontend for **Muhammad Umar**, Full-Stack Software Engineer. Built with React, Tailwind CSS, and Framer Motion. Designed for performance, accessibility, and maintainability.
 
 ![React](https://img.shields.io/badge/React-18.2-61DAFB?logo=react)
 ![Vite](https://img.shields.io/badge/Vite-5.4-646CFF?logo=vite)
 ![Tailwind](https://img.shields.io/badge/Tailwind-3.4-06B6D4?logo=tailwindcss)
-![TypeScript](https://img.shields.io/badge/TypeScript-Ready-3178C6?logo=typescript)
 ![Motion](https://img.shields.io/badge/Motion-12.42-FF007F?logo=framer)
 ![TanStack Query](https://img.shields.io/badge/TanStack_Query-5.101-FF4154?logo=reactquery)
 
@@ -14,43 +13,47 @@ Production-grade portfolio frontend for **Muhammad Umar**, Full-Stack Software E
 ## Features
 
 ### Public Site
-- Responsive hero with animated profile portrait, social links, and resume download
-- Featured projects grid with thumbnail previews
-- Skills matrix with progress indicators
-- Experience timeline
-- Education and certifications
-- Latest blog posts
-- Contact form with validation
-- Dark / light / system theme switching
-- Global search
-- SEO meta tags, Open Graph, Twitter Cards, sitemap, robots.txt
+- **Hero section** with animated profile portrait, parallax background, social links, WhatsApp chat, and resume download
+- **Animated stats strip** with scroll-triggered counters (years, projects, skills, certifications)
+- **Featured projects** grid with hover effects and staggered reveal animations
+- **Skills matrix** with animated SVG radial progress rings, category-specific colors, and glow effects
+- **Experience timeline** with alternating cards and scroll-triggered reveals
+- **Education timeline** with glassmorphism cards, pulsing timeline dots, and alternating layout
+- **Certificates** with premium holographic shimmer cards, verified stamps, and credential verification links
+- **Latest blog posts** grid with cover images and reading time
+- **Contact form** with validation and WhatsApp deep link
+- **Global search** across projects, blogs, skills, experience, education, and certificates
+- **Dark / light / system theme** switching with persistent preference
+- **SEO meta tags**, Open Graph, Twitter Cards, manifest, favicon set
 
 ### Admin Dashboard
 - Protected admin routes with authentication guards
 - Dashboard analytics with charts and KPIs
 - Profile management with image and resume upload
 - Projects CRUD with category and status management
-- Skills matrix management
+- Skills matrix management with category and proficiency levels
 - Experience timeline management
-- Education and certificates management
+- Education records management
+- Certificates management with badge images and credential verification
 - Blog management with rich metadata
-- Contact inbox with status workflow
-- Upload center with Cloudinary integration
-- Site settings management
+- Contact inbox with read/replied status workflow
+- Upload center with Vercel Blob integration
+- Site settings management (branding, SEO, social links, theme)
 - Account management with password change
 
 ### Engineering
 - Feature-first architecture with clear separation of concerns
-- Centralized motion system with Framer Motion
-- GPU-accelerated animations respecting `prefers-reduced-motion`
-- Code splitting and lazy-loaded routes
+- Centralized motion system with Framer Motion and custom scroll reveal components
+- Route-level code splitting with `React.lazy` and `Suspense` (initial bundle ~132 KB gzipped)
+- GPU-accelerated animations only (`transform`, `opacity`) with `prefers-reduced-motion` support
 - TanStack Query for server state with optimistic updates
 - Zod validation for forms and uploads
 - Normalized API error handling
 - ESLint with strict rules and zero-warning policy
 - Prettier + Husky + lint-staged + commitlint
-- Cloudinary-backed upload pipeline with progress tracking
 - Accessible UI primitives with ARIA labels and focus management
+- GitHub Actions CI with lint + build on every push/PR
+- Vercel preview and production deployment automation
 
 ---
 
@@ -68,10 +71,11 @@ Production-grade portfolio frontend for **Muhammad Umar**, Full-Stack Software E
 | Forms | React Hook Form + Zod |
 | Charts | Recharts |
 | Icons | Lucide React |
-| Uploads | Cloudinary |
+| Uploads | Vercel Blob / Cloudinary |
 | Linting | ESLint 9 (flat config) |
 | Formatting | Prettier |
 | Git Hooks | Husky + lint-staged + commitlint |
+| CI/CD | GitHub Actions + Vercel |
 
 ---
 
@@ -79,18 +83,18 @@ Production-grade portfolio frontend for **Muhammad Umar**, Full-Stack Software E
 
 ### Prerequisites
 
-- Node.js >= 18
-- npm >= 9
+- Node.js >= 22
+- Yarn >= 1.22
 - Backend API running (see `portfolio-backend`)
 
 ### Installation
 
 ```bash
 # Install dependencies
-npm install
+yarn install
 
 # Start development server
-npm run dev
+yarn dev
 ```
 
 The app is available at `http://localhost:5173`.
@@ -112,14 +116,14 @@ Copy `.env.example` to `.env` and configure:
 
 | Command | Description |
 |---------|-------------|
-| `npm run dev` | Start development server |
-| `npm run build` | Production build |
-| `npm run preview` | Preview production build locally |
-| `npm run lint` | Run ESLint with zero-warning policy |
-| `npm run lint:fix` | Auto-fix lint issues |
-| `npm run format` | Format code with Prettier |
-| `npm run format:check` | Check formatting |
-| `npm run prepare` | Install git hooks |
+| `yarn dev` | Start development server |
+| `yarn build` | Production build |
+| `yarn preview` | Preview production build locally |
+| `yarn lint` | Run ESLint with zero-warning policy |
+| `yarn lint:fix` | Auto-fix lint issues |
+| `yarn format` | Format code with Prettier |
+| `yarn format:check` | Check formatting |
+| `yarn prepare` | Install git hooks |
 
 ---
 
@@ -133,36 +137,35 @@ src/
 │   ├── endpoints.js            # Centralized API route map
 │   └── queryClient.js          # TanStack Query configuration
 ├── app/                        # App shell and providers
-│   ├── AppProviders.jsx        # Context and router wrapper
 │   ├── AppMetadata.jsx         # Dynamic SEO meta tags
-│   ├── Router.jsx              # Lazy-loaded route definitions
+│   ├── AppProviders.jsx        # Context and router wrapper
 │   ├── RouteFallback.jsx       # Route-level suspense fallback
+│   ├── Router.jsx              # Lazy-loaded route definitions
 │   └── ScrollToTop.jsx         # Scroll restoration on navigation
 ├── components/
 │   ├── common/                 # Shared layout components
-│   │   ├── AnimatedNumber.jsx
-│   │   ├── BrandIcons.jsx
-│   │   ├── SectionHeading.jsx
-│   │   └── ThemeToggle.jsx
+│   │   ├── AnimatedNumber.jsx  # Scroll-triggered animated counters
+│   │   ├── BrandIcons.jsx      # Social brand icon components
+│   │   ├── Reveal.jsx          # Scroll-triggered reveal wrapper
+│   │   ├── SectionHeading.jsx  # Reusable section header
+│   │   └── ThemeToggle.jsx     # Dark/light/system theme switcher
 │   ├── forms/                  # Form-specific components
-│   │   ├── FileUploadField.jsx
-│   │   └── TagInput.jsx
+│   │   ├── FileUploadField.jsx # Upload with progress tracking
+│   │   └── TagInput.jsx        # Tag/chip input with keyboard support
 │   └── ui/                     # Design system primitives
 │       ├── Avatar.jsx
 │       ├── Badge.jsx
-│       ├── Button.jsx
+│       ├── Button.jsx          # Variants: primary, secondary, ghost, danger, outline, link
 │       ├── Card.jsx
 │       ├── Checkbox.jsx
 │       ├── ConfirmDialog.jsx
-│       ├── DataTable.jsx
-│       ├── Dialog.jsx
+│       ├── DataTable.jsx       # Sortable table with pagination
 │       ├── Drawer.jsx
 │       ├── EmptyState.jsx
 │       ├── ErrorState.jsx
-│       ├── Input.jsx
+│       ├── Input.jsx           # With startAdornment/endAdornment support
 │       ├── Modal.jsx
 │       ├── Pagination.jsx
-│       ├── Radio.jsx
 │       ├── Select.jsx
 │       ├── Skeleton.jsx
 │       ├── Spinner.jsx
@@ -173,7 +176,7 @@ src/
 │       └── index.js
 ├── config/
 │   ├── env.js                  # Runtime environment configuration
-│   └── identity.js             # Brand identity and fallback values
+│   └── identity.js             # Brand identity and API fallback values
 ├── constants/
 │   ├── enums.js                # Shared enums and status metadata
 │   ├── pagination.js           # Admin page size constants
@@ -193,7 +196,16 @@ src/
 │   ├── contact/                # Contact form and inbox
 │   ├── education/              # Education records
 │   ├── experience/             # Work experience timeline
-│   ├── home/                   # Public homepage
+│   ├── home/                   # Public homepage with premium sections
+│   │   ├── components/
+│   │   │   ├── FeaturedProjects.jsx
+│   │   │   ├── SkillsRadialSection.jsx
+│   │   │   ├── EducationTimelineSection.jsx
+│   │   │   ├── CertificatesPremiumSection.jsx
+│   │   │   ├── ExperienceSection.jsx
+│   │   │   └── BlogSection.jsx
+│   │   └── pages/
+│   │       └── HomePage.jsx
 │   ├── misc/                   # 404 page
 │   ├── profile/                # Public profile CRUD
 │   ├── projects/               # Projects public pages and admin
@@ -216,9 +228,15 @@ src/
 │   ├── upload.js               # Upload helper utilities
 │   └── validators.js           # Zod schemas and upload constraints
 ├── motion/                     # Centralized motion system
-│   ├── AnimatedSection.jsx     # Scroll-triggered reveal
-│   ├── FadeImage.jsx           # Image fade-in with placeholder
-│   ├── PageTransition.jsx      # Route transition wrapper
+│   ├── AnimatedSection.jsx     # Scroll-triggered section wrapper
+│   ├── FadeImage.jsx           # Image fade-in with skeleton
+│   ├── PageTransition.jsx      # Route transition with AnimatePresence
+│   ├── ScrollReveal.jsx        # Scroll reveal with multiple modes (fade, clip, blur, scale)
+│   ├── ParallaxLayer.jsx       # Parallax scroll effect
+│   ├── ScrollCounter.jsx       # Animated number counters
+│   ├── StaggerGrid.jsx         # Staggered children container
+│   ├── StaggerItem.jsx         # Staggered child item
+│   ├── TextReveal.jsx          # Text-specific reveal
 │   ├── constants.js            # Easing curves and durations
 │   ├── hooks.js                # useReducedMotion
 │   ├── index.js
@@ -254,24 +272,27 @@ All UI primitives live in `src/components/ui/` and follow a consistent contract:
 - **Sizes** — `xs`, `sm`, `md`, `lg`, `icon`
 - **States** — default, hover, focus, disabled, loading, error, success
 - **Dark mode** — All components use semantic CSS variables
+- **Adornments** — `Input` supports `startAdornment` / `endAdornment` for icons
 
 ### Motion System
 
 The `src/motion/` layer provides:
 
-- Shared easing curves and durations
-- Reusable Framer Motion variants
-- `PageTransition` for route changes
-- `AnimatedSection` for scroll reveals
-- `FadeImage` for image loading states
+- Shared easing curves and durations (`ease-out-expo` throughout)
+- `ScrollReveal` — 8 reveal modes: `fadeUp`, `fadeDown`, `fadeLeft`, `fadeRight`, `scaleIn`, `clipUp`, `clipDown`, `blurIn`
+- `StaggerGrid` / `StaggerItem` — orchestrated children reveals
+- `ScrollCounter` — animated number counters on scroll
+- `ParallaxLayer` — parallax scroll effect
+- `PageTransition` with `AnimatePresence` for route changes
+- `FadeImage` for image loading states with skeleton
 - Automatic `prefers-reduced-motion` respect
 
 ---
 
 ## Performance
 
-- Route-based code splitting with `React.lazy` and `Suspense`
-- Manual vendor chunks: React, data layer, charts
+- Route-based code splitting with `React.lazy` and `Suspense` (~132 KB initial JS gzipped)
+- Manual vendor chunks: React, data layer, charts isolated
 - Image CLS prevention with explicit `width` and `height`
 - Lazy loading for non-critical images
 - Memoized pure UI components
@@ -288,6 +309,7 @@ The `src/motion/` layer provides:
 - Keyboard navigation support
 - `prefers-reduced-motion` respected globally
 - Color contrast compliance
+- Skeleton loaders instead of spinners for layout stability
 
 ---
 
@@ -302,19 +324,38 @@ The `src/motion/` layer provides:
 
 ## Deployment
 
-### Vercel
+### Vercel (Recommended)
 
 1. Connect the repository
 2. Set environment variables in project settings
-3. Deploy on push to `development` branch
+3. Deploy on push to `development` branch (preview) or `main` branch (production)
 
 ### Other Platforms
 
 ```bash
-npm run build
+yarn build
 ```
 
 The `dist/` folder contains the production build.
+
+---
+
+## CI/CD
+
+### GitHub Actions
+
+| Event | What runs |
+|-------|-----------|
+| Push/PR to `main` or `development` | Lint + Build with Node 22 and Yarn |
+| Push to `main` | Deploy to Vercel production |
+
+### Required GitHub Secrets (for deployment)
+
+| Secret | Description |
+|--------|-------------|
+| `VERCEL_TOKEN` | Vercel API token |
+| `VERCEL_ORG_ID` | Vercel organization ID |
+| `VERCEL_PROJECT_ID` | Vercel project ID |
 
 ---
 
@@ -325,7 +366,7 @@ This is a personal portfolio project. If you want to use it as a template:
 1. Fork the repository
 2. Create a feature branch
 3. Follow the existing code style
-4. Ensure `npm run lint` passes with zero warnings
+4. Ensure `yarn lint` passes with zero warnings
 5. Submit a pull request
 
 ---
