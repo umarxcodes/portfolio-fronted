@@ -93,6 +93,7 @@ export function AppRoutes() {
               <Route path="contact" element={<ContactAdminPage />} />
               <Route path="contact/:id" element={<ContactDetailPage />} />
               <Route path="uploads" element={<UploadsAdminPage />} />
+              <Route path="analytics" element={<DashboardPage />} />
               <Route path="settings" element={<SettingsAdminPage />} />
               <Route path="account" element={<AccountPage />} />
             </Route>
