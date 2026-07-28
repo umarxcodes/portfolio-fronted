@@ -13,18 +13,17 @@ Production-grade portfolio frontend for **Muhammad Umar**, Full-Stack Software E
 ## Features
 
 ### Public Site
-- **Hero section** with animated profile portrait, parallax background, social links, WhatsApp chat, and resume download
-- **Animated stats strip** with scroll-triggered counters (years, projects, skills, certifications)
-- **Featured projects** grid with hover effects and staggered reveal animations
-- **Skills matrix** with animated SVG radial progress rings, category-specific colors, and glow effects
-- **Experience timeline** with alternating cards and scroll-triggered reveals
-- **Education timeline** with glassmorphism cards, pulsing timeline dots, and alternating layout
-- **Certificates** with premium holographic shimmer cards, verified stamps, and credential verification links
-- **Latest blog posts** grid with cover images and reading time
-- **Contact form** with validation and WhatsApp deep link
-- **Global search** across projects, blogs, skills, experience, education, and certificates
-- **Dark / light / system theme** switching with persistent preference
-- **SEO meta tags**, Open Graph, Twitter Cards, manifest, favicon set
+- Responsive hero with animated profile portrait, parallax background glow, social links, WhatsApp chat button, and resume download
+- Animated stats strip with scroll-triggered number counters (years of experience, projects, skills, certifications)
+- Featured projects grid with thumbnail previews and hover effects
+- Skills matrix grouped by category with progress bars
+- Experience timeline with employment cards
+- Education and certificates section with academic and professional credentials
+- Latest blog posts grid with cover images and reading time
+- Contact form with validation and WhatsApp deep link
+- Dark / light / system theme switching with persistent preference
+- Global search across projects, blogs, skills, experience, education, and certificates
+- SEO meta tags, Open Graph, Twitter Cards, manifest, favicon set
 
 ### Admin Dashboard
 - Protected admin routes with authentication guards
@@ -43,7 +42,7 @@ Production-grade portfolio frontend for **Muhammad Umar**, Full-Stack Software E
 
 ### Engineering
 - Feature-first architecture with clear separation of concerns
-- Centralized motion system with Framer Motion and custom scroll reveal components
+- Centralized motion system with Framer Motion
 - Route-level code splitting with `React.lazy` and `Suspense` (initial bundle ~132 KB gzipped)
 - GPU-accelerated animations only (`transform`, `opacity`) with `prefers-reduced-motion` support
 - TanStack Query for server state with optimistic updates
@@ -146,7 +145,7 @@ src/
 │   ├── common/                 # Shared layout components
 │   │   ├── AnimatedNumber.jsx  # Scroll-triggered animated counters
 │   │   ├── BrandIcons.jsx      # Social brand icon components
-│   │   ├── Reveal.jsx          # Scroll-triggered reveal wrapper
+│   │   ├── Reveal.jsx          # Scroll-triggered reveal wrapper with direction support
 │   │   ├── SectionHeading.jsx  # Reusable section header
 │   │   └── ThemeToggle.jsx     # Dark/light/system theme switcher
 │   ├── forms/                  # Form-specific components
@@ -196,13 +195,12 @@ src/
 │   ├── contact/                # Contact form and inbox
 │   ├── education/              # Education records
 │   ├── experience/             # Work experience timeline
-│   ├── home/                   # Public homepage with premium sections
+│   ├── home/                   # Public homepage
 │   │   ├── components/
 │   │   │   ├── FeaturedProjects.jsx
-│   │   │   ├── SkillsRadialSection.jsx
-│   │   │   ├── EducationTimelineSection.jsx
-│   │   │   ├── CertificatesPremiumSection.jsx
+│   │   │   ├── SkillsSection.jsx
 │   │   │   ├── ExperienceSection.jsx
+│   │   │   ├── EducationSection.jsx
 │   │   │   └── BlogSection.jsx
 │   │   └── pages/
 │   │       └── HomePage.jsx
@@ -214,7 +212,7 @@ src/
 │   ├── skills/                 # Skills matrix and admin
 │   └── uploads/                # Asset management
 ├── hooks/
-│   ├── index.js                # Custom hooks: useDebounce, useLocalStorage, etc.
+│   ├── index.js                # Custom hooks: useDebounce, useLocalStorage, useScrollReveal
 │   └── useOverlay.js           # Shared modal and drawer behavior
 ├── layouts/
 │   ├── DashboardLayout/        # Admin sidebar layout
@@ -229,14 +227,8 @@ src/
 │   └── validators.js           # Zod schemas and upload constraints
 ├── motion/                     # Centralized motion system
 │   ├── AnimatedSection.jsx     # Scroll-triggered section wrapper
-│   ├── FadeImage.jsx           # Image fade-in with skeleton
+│   ├── FadeImage.jsx           # Image fade-in with placeholder
 │   ├── PageTransition.jsx      # Route transition with AnimatePresence
-│   ├── ScrollReveal.jsx        # Scroll reveal with multiple modes (fade, clip, blur, scale)
-│   ├── ParallaxLayer.jsx       # Parallax scroll effect
-│   ├── ScrollCounter.jsx       # Animated number counters
-│   ├── StaggerGrid.jsx         # Staggered children container
-│   ├── StaggerItem.jsx         # Staggered child item
-│   ├── TextReveal.jsx          # Text-specific reveal
 │   ├── constants.js            # Easing curves and durations
 │   ├── hooks.js                # useReducedMotion
 │   ├── index.js
@@ -279,13 +271,12 @@ All UI primitives live in `src/components/ui/` and follow a consistent contract:
 The `src/motion/` layer provides:
 
 - Shared easing curves and durations (`ease-out-expo` throughout)
-- `ScrollReveal` — 8 reveal modes: `fadeUp`, `fadeDown`, `fadeLeft`, `fadeRight`, `scaleIn`, `clipUp`, `clipDown`, `blurIn`
-- `StaggerGrid` / `StaggerItem` — orchestrated children reveals
-- `ScrollCounter` — animated number counters on scroll
-- `ParallaxLayer` — parallax scroll effect
 - `PageTransition` with `AnimatePresence` for route changes
-- `FadeImage` for image loading states with skeleton
-- Automatic `prefers-reduced-motion` respect
+- `AnimatedSection` for scroll-triggered section reveals
+- `FadeImage` for image loading states with skeleton placeholder
+- `useReducedMotion` hook for accessibility
+- Reusable Framer Motion variants in `variants.js`
+- CSS-based `Reveal` component with directional support (`up`, `down`, `left`, `right`)
 
 ---
 
@@ -295,7 +286,6 @@ The `src/motion/` layer provides:
 - Manual vendor chunks: React, data layer, charts isolated
 - Image CLS prevention with explicit `width` and `height`
 - Lazy loading for non-critical images
-- Memoized pure UI components
 - TanStack Query caching with `staleTime` and `gcTime`
 - GPU-accelerated animations only (`transform`, `opacity`)
 
