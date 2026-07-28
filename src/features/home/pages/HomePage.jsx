@@ -20,9 +20,10 @@ import { getErrorMessage } from "@/lib/errorHandler";
 import { cn } from "@/lib/cn";
 import {
   FeaturedProjectsSection,
-  SkillsSectionWrapper,
+  SkillsRadialSection,
   ExperienceSectionWrapper,
-  EducationCertificatesWrapper,
+  EducationTimelineSection,
+  CertificatesPremiumSection,
   BlogSectionWrapper,
 } from "@/features/home/components";
 import { getIdentityProfile, getIdentitySettings, identity } from "@/config/identity";
@@ -315,11 +316,7 @@ export default function HomePage() {
       </AnimatedSection>
 
       <AnimatedSection>
-        <SkillsSectionWrapper
-          skillGroups={skillGroups}
-          total={skillsData?.total}
-          isLoading={skillsLoad}
-        />
+        <SkillsRadialSection skillGroups={skillGroups} isLoading={skillsLoad} />
       </AnimatedSection>
 
       <AnimatedSection>
@@ -327,7 +324,11 @@ export default function HomePage() {
       </AnimatedSection>
 
       <AnimatedSection>
-        <EducationCertificatesWrapper education={education} certificates={certificates} />
+        <EducationTimelineSection education={education} />
+      </AnimatedSection>
+
+      <AnimatedSection>
+        <CertificatesPremiumSection certificates={certificates} />
       </AnimatedSection>
 
       <AnimatedSection>
